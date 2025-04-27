@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Tableau de Suivi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de Suivi</title>
+
+  <!-- Tailwind CSS – indispensable pour que les classes `border`, `rounded`, etc. s’affichent -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Tableau de Suivi</h1>
-    <a href="rmr_calculator.html" class="text-blue-600 underline">
-      Calculateur Métabolisme & Macros
-    </a>
-    <table class="mt-6">
-      <tr>
-        <td>Nutrition</td>
-        <td>
-          <input name="nutrition" type="text" class="border rounded p-1" placeholder="protéines/glucides/lipides" />
-          <button type="button" onclick="window.open('rmr_calculator.html','_blank','width=900,height=900')" class="ml-2 px-2 py-1 bg-blue-500 text-white rounded">Importer macros du jour</button>
-        </td>
-      </tr>
-      <!-- autres lignes du tableau -->
-    </table>
-    <script>
+<body class="bg-slate-50 min-h-screen p-6">
+  <h1 class="text-3xl font-bold mb-4">Tableau de Suivi</h1>
+
+  <a href="rmr_calculator.html"
+     target="_blank"
+     class="text-blue-600 underline hover:text-blue-800">
+    Calculateur Métabolisme &amp; Macros
+  </a>
+
+  <table class="mt-6">
+    <tr>
+      <td class="font-semibold pr-2">Nutrition</td>
+      <td>
+        <input name="nutrition"
+               type="text"
+               class="border rounded p-2"
+               placeholder="protéines/glucides/lipides" />
+
+        <button type="button"
+                onclick="window.open('rmr_calculator.html','_blank','width=900,height=900')"
+                class="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+          Importer macros du jour
+        </button>
+      </td>
+    </tr>
+    <!-- autres lignes du tableau -->
+  </table>
+
+  <script>
     function remplirMacros(prot, carb, fat) {
-      document.querySelector('[name="nutrition"]').value = `${prot}/${carb}/${fat}`;
+      document.querySelector('[name=\"nutrition\"]').value = `${prot}/${carb}/${fat}`;
     }
-    </script>
+  </script>
 </body>
 </html>
