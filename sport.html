@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau de Suivi d'Entraînement Annoté</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@3.3.1/400.min.css">
+  <style>
+    html, body { font-family: 'Roboto', Arial, sans-serif; background: #f9fafb }
+    th, td { vertical-align: middle !important; }
+    table { background: #fff; }
+    .legend-box { font-size: 0.95rem; }
+    .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    /* For optimized PDF export: ensure tables and content are fully expanded */
+    .w-min-w-full { min-width: 100%; }
+  </style>
+</head>
+<body class="pt-6 pb-12 px-4 sm:px-16 lg:px-32 bg-gray-50">
+  <div class="max-w-screen-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-dumbbell text-blue-500 mr-3"></i>Tableau de Suivi d'Entraînement Annoté</h1>
+    <p class="text-base text-gray-600 mb-6">Version annotée et optimisée pour CrossFit, MMA, HYROX : inclut explications, légendes et valeurs de référence scientifiques pour chaque indicateur. Optimisé pour export PDF sur une seule page continue.</p>
+    
+    <!-- Légendes et explications générales -->
+    <section class="mb-8">
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 grid grid-cols-1 md:grid-cols-2 gap-4 legend-box">
+        <div>
+          <span class="font-bold">RPE (1–10)</span> <i class="fas fa-chart-line text-blue-400"></i>: <br>
+          &nbsp;&nbsp;1 = Extrêmement facile · 5 = Modéré · 8 = Très difficile · 10 = Effort maximal
+          <br>
+          <span class="font-bold">sRPE</span>: <br>
+          &nbsp;&nbsp;Charge interne = RPE × Durée (min) <br>Sert à comparer l’effort entre séances et disciplines.
+          <br>
+          <span class="font-bold">Fatigue / Qualité Exécution / Bien-être (1–5)</span>: <br>
+          &nbsp;&nbsp;1 = Mauvais · 3 = Moyen · 5 = Excellent
+          <br>
+          <span class="font-bold">Qualité sommeil (1–5)</span> : <br>
+          &nbsp;&nbsp;1 = Très mauvais · 5 = Excellent – Score ressenti après réveil.
+          <br>
+          <span class="font-bold">VFC/HRV</span>: <br>
+          &nbsp;&nbsp;Variabilité de la FC au réveil, indicateur récupération (haut = bon).
+        </div>
+        <div>
+          <span class="font-bold">Charge externe</span>: <br>
+          <i class="fas fa-running text-green-500"></i> Course : km/zone, allure, FC <br>
+          <i class="fas fa-dumbbell text-indigo-500"></i> Force : charge totale (kg), %1RM <br>
+          <i class="fas fa-stopwatch text-pink-500"></i> CrossFit/Hyrox : reps, rounds, temps, puissance <br>
+          <span class="font-bold">Récupération utilisée</span> : <br>
+          Exemples : sommeil, sieste, auto-massage, bain froid, mobility, etc.
+          <br>
+          <span class="font-bold">Nutrition</span>: <br>
+          Apports clés du jour –  Protéines (g), Glucides (g), Lipides (g), Hydratation (L)
+          <br>
+          <span class="font-bold">Notes</span>:<br>
+          Observations sur blessures, moral, contexte, retour d’expérience libre
+        </div>
+      </div>
+    </section>
+
+    <!-- Tableau principal de saisie -->
+    <div class="mb-6">
+      <table class="min-w-full text-sm border border-gray-300 rounded shadow-sm">
+        <thead>
+          <tr class="bg-blue-100 text-gray-800">
+            <th class="px-2 py-2 border font-bold">Jour</th>
+            <th class="px-2 py-2 border font-bold">Date</th>
+            <th class="px-2 py-2 border font-bold">Séance</th>
+            <th class="px-2 py-2 border font-bold">Type activité</th>
+            <th class="px-2 py-2 border font-bold">Contenu détaillé</th>
+            <th class="px-2 py-2 border font-bold">Durée (min)</th>
+            <th class="px-2 py-2 border font-bold">RPE<br>(1–10)</th>
+            <th class="px-2 py-2 border font-bold">sRPE<br>(RPE×min)</th>
+            <th class="px-2 py-2 border font-bold">Charge<br>externe</th>
+            <th class="px-2 py-2 border font-bold">Fatigue<br>pré (1–5)</th>
+            <th class="px-2 py-2 border font-bold">Fatigue<br>post (1–5)</th>
+            <th class="px-2 py-2 border font-bold">Qualité<br>exécution (1–5)</th>
+            <th class="px-2 py-2 border font-bold">Sommeil (h)</th>
+            <th class="px-2 py-2 border font-bold">Qualité<br>som. (1–5)</th>
+            <th class="px-2 py-2 border font-bold">VFC/HRV</th>
+            <th class="px-2 py-2 border font-bold">Bien-être<br>(1–5)</th>
+            <th class="px-2 py-2 border font-bold">Récup.<br> utilisée</th>
+            <th class="px-2 py-2 border font-bold">Nutrition</th>
+            <th class="px-2 py-2 border font-bold">Notes</th>
+          </tr>
+        </thead>
+        <tbody id="training-table-body">
+          <!-- Exemple de ligne par défaut -->
+          <tr class="border-b hover:bg-blue-50">
+            <td class="px-2 py-2 border text-center">Lun</td>
+            <td class="px-2 py-2 border text-center"><input type="date" class="w-32 p-1 border rounded" value=""></td>
+            <td class="px-2 py-2 border text-center"><input type="text" class="w-24 p-1 border rounded" placeholder="Matin/AM/PM"></td>
+            <td class="px-2 py-2 border">
+              <select class="w-32 p-1 border rounded">
+                <option>Course</option>
+                <option>Force</option>
+                <option>CrossFit/Hyrox</option>
+                <option>MMA</option>
+                <option>Mobilité</option>
+                <option>Repos actif</option>
+                <option>Technique</option>
+              </select>
+            </td>
+            <td class="px-2 py-2 border">
+              <input type="text" class="w-56 p-1 border rounded" placeholder="Description, ex WOD, Run, série, tempos...">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="0" class="w-16 p-1 border rounded" placeholder="ex 60">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="1" max="10" class="w-12 p-1 border rounded" placeholder="ex 7">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="0" class="w-16 p-1 border rounded" placeholder="sRPE" title="RPE × Durée">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="text" class="w-24 p-1 border rounded" placeholder="•km, kg, %1RM">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="1" max="5" class="w-10 p-1 border rounded" title="1=Très fatigué, 5=Ressenti frais">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="1" max="5" class="w-10 p-1 border rounded" title="1=Épuisé, 5=Aucun effet perceptible">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="1" max="5" class="w-10 p-1 border rounded" title="1=Mauvaise exécution, 5=Parfaite exécution">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="0" max="12" step="0.25" class="w-12 p-1 border rounded" placeholder="h" title="Heures de sommeil réel">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="1" max="5" class="w-10 p-1 border rounded" title="1=Très mauvais, 5=Excellent">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="0" max="200" class="w-14 p-1 border rounded" placeholder="VFC" title="ms, Score App/Capteur">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="number" min="1" max="5" class="w-10 p-1 border rounded" title="1=Mauvais moral, 5=Excellent moral">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="text" class="w-24 p-1 border rounded" placeholder="ex: bain froid, auto-massage">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="text" class="w-28 p-1 border rounded" placeholder="Protéines, Glucides, Lipides">
+            </td>
+            <td class="px-2 py-2 border text-center">
+              <input type="text" class="w-44 p-1 border rounded" placeholder="Commentaires, blessures, etc.">
+            </td>
+          </tr>
+          <!-- Ajoutez d'autres lignes à la volée si besoin -->
+        </tbody>
+      </table>
+      <!-- Bouton d'ajout de jour -->
+      <div class="mt-4 flex">
+        <button id="add-row-btn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded flex items-center focus:outline-none">
+          <i class="fas fa-plus mr-2"></i> Ajouter un Jour
+        </button>
+        <span class="ml-6 text-gray-500 text-xs flex items-center"><i class="fas fa-info-circle mr-1"></i> Ajoutez autant de jours ou séances que nécessaire pour couvrir votre semaine ou cycle</span>
+      </div>
+    </div>
+
+    <!-- Bloc d'annotation des valeurs de référence -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-gray-800 mb-2 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i>Valeurs de référence & barèmes simplifiés</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-gray-700 text-sm">
+        <div class="bg-yellow-50 border rounded-lg px-3 py-2">
+          <span class="font-bold">RPE :</span>
+          <br>
+          1-2 = Très facile (échauffement, mobilité)<br>
+          3-4 = Facile<br>
+          5-6 = Modéré (effort contrôlé)<br>
+          7-8 = Difficile à très difficile (intense)<br>
+          9-10 = Quasi-maximal à maximal
+        </div>
+        <div class="bg-yellow-50 border rounded-lg px-3 py-2">
+          <span class="font-bold">Fatigue / Bien-être / Qualité sommeil :</span>
+          <br>
+          1 = Très mauvais • 2 = Mauvais<br>
+          3 = Moyen • 4 = Bon<br>
+          5 = Excellent
+        </div>
+        <div class="bg-yellow-50 border rounded-lg px-3 py-2">
+          <span class="font-bold">VFC/HRV</span> (<span title="Variables dépendantes de l'âge, du sexe, du niveau d'entraînement">titre info</span>) :
+          <br>
+          Très bas = Risque de fatigue / surmenage<br>
+          Moyenne = Adapté <br>
+          Très élevé = Récupération optimale<br>
+          <span class="text-xs text-gray-500">(Comparer la tendance individuelle sur plusieurs semaines)</span>
+        </div>
+        <div class="bg-yellow-50 border rounded-lg px-3 py-2 col-span-2">
+          <span class="font-bold">sRPE :</span>
+          <br>
+          <span class="italic">Charge interne = RPE × Durée</span> <br>
+          &bull; Semaine basse (<6x40min, RPE ≤5) ≈ 1200 UA <br>
+          &bull; Semaine moyenne (7–10 heures, RPE 6–7) ≈ 2400–4200 UA <br>
+          &bull; Surveillez les hausses >15% par semaine pour réduire le risque de blessure (voir ACWR/Gold-standard scientifique).
+        </div>
+        <div class="bg-yellow-50 border rounded-lg px-3 py-2">
+          <span class="font-bold">Charge externe :</span>
+          <br>
+          Ex : <br>
+          • Force : kg, %1RM, tonnage séance, etc.<br>
+          • Course : km, allure, FC (Z1-Z5)<br>
+          • Hyrox : rounds, temps total, reps globales
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculateur Métabolisme & Macros (fusionné) -->
+    <section id="nutrisport-section" class="mt-10 mb-12">
+      <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-4xl mx-auto space-y-8">
+        <h2 class="text-3xl font-bold text-center">Calculateur Métabolisme & Répartition des Macros</h2>
+        <div id="export-buttons" class="flex gap-4 mb-4">
+          <button id="export-csv" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Exporter CSV</button>
+          <button id="export-pdf" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Exporter PDF</button>
+          <button id="export-sheets" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Exporter vers Sheets</button>
+        </div>
+        <form id="form" class="grid gap-4 sm:grid-cols-3">
+          <div class="flex flex-col">
+            <label class="font-semibold mb-1">Sexe</label>
+            <select id="sex" class="p-2 rounded-lg border bg-white">
+              <option value="male">Homme</option>
+              <option value="female">Femme</option>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label class="font-semibold mb-1">Poids (kg)</label>
+            <input id="weight" type="number" min="1" value="70" class="p-2 rounded-lg border" />
+          </div>
+          <div class="flex flex-col">
+            <label class="font-semibold mb-1">Taille (cm)</label>
+            <input id="height" type="number" min="50" value="175" class="p-2 rounded-lg border" />
+          </div>
+          <div class="flex flex-col">
+            <label class="font-semibold mb-1">Âge (années)</label>
+            <input id="age" type="number" min="1" value="30" class="p-2 rounded-lg border" />
+          </div>
+          <div class="flex flex-col">
+            <label class="font-semibold mb-1">NAP / PAL</label>
+            <select id="pal" class="p-2 rounded-lg border bg-white">
+              <option value="1.2">Sédentaire (1.0 – 1.39) → 1.20</option>
+              <option value="1.5">Peu actif (1.4 – 1.59) → 1.50</option>
+              <option value="1.75">Actif (1.6 – 1.89) → 1.75</option>
+              <option value="2.2">Très actif (1.9 – 2.5) → 2.20</option>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label class="font-semibold mb-1">Objectif</label>
+            <select id="goal" class="p-2 rounded-lg border bg-white">
+              <option value="maintenance">Maintien du poids</option>
+              <option value="lean_bulk">Prise de masse sèche</option>
+              <option value="bulk">Prise de masse classique</option>
+              <option value="cut">Perte de masse grasse</option>
+              <option value="endurance">Performance endurance</option>
+              <option value="strength">Force / puissance</option>
+            </select>
+          </div>
+        </form>
+        <section id="resultsEnergy" class="bg-gray-100 rounded-xl p-6 shadow-inner space-y-2">
+          <h3 class="text-2xl font-semibold mb-2">Énergie</h3>
+          <p class="text-lg">⦿ <strong>RMR</strong> : <span id="rmr" class="font-mono">0</span> kcal/jour</p>
+          <p class="text-lg">⦿ <strong>TDEE</strong> : <span id="tdee" class="font-mono">0</span> kcal/jour</p>
+          <p class="text-lg">⦿ <strong>Apport cible</strong> : <span id="targetKcal" class="font-mono">0</span> kcal/jour (<span id="delta">0</span>%)</p>
+        </section>
+        <section id="resultsMacros" class="bg-gray-100 rounded-xl p-6 shadow-inner space-y-4">
+          <h3 class="text-2xl font-semibold mb-4">Répartition des macronutriments</h3>
+          <div class="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p class="text-5xl font-mono" id="protG">0</p>
+              <p class="font-semibold">g Protéines</p>
+            </div>
+            <div>
+              <p class="text-5xl font-mono" id="carbG">0</p>
+              <p class="font-semibold">g Glucides</p>
+            </div>
+            <div>
+              <p class="text-5xl font-mono" id="fatG">0</p>
+              <p class="font-semibold">g Lipides</p>
+            </div>
+          </div>
+          <button id="sendToJournal" type="button" class="mt-6 px-4 py-2 bg-green-600 text-white rounded font-semibold">Envoyer vers Journal (Nutrition)</button>
+        </section>
+        <details class="bg-white rounded-lg shadow p-4">
+          <summary class="cursor-pointer font-semibold">Méthodologie & formules</summary>
+          <p class="mt-2 text-sm">RMR : Pavlidou 2023. TDEE = RMR × PAL. Surplus/déficit selon l'objectif : +10 % bulk, +5 % lean bulk, –20 % cut, 0 % maintien, +0 % endurance/strength (ajuster).</p>
+          <p class="text-sm">Protein/Lipid coefficients basées sur ISSN 2017–22 & ACSM 2016.</p>
+        </details>
+      </div>
+      <script>
+        const el = id => document.getElementById(id);
+        const GOAL_PARAMS = {
+          maintenance: { delta: 0, prot: 1.4, fat: 0.9 },
+          lean_bulk:   { delta: 0.05, prot: 2.0, fat: 0.9 },
+          bulk:        { delta: 0.10, prot: 1.8, fat: 0.8 },
+          cut:         { delta: -0.20, prot: 2.4, fat: 0.9 },
+          endurance:   { delta: 0, prot: 1.4, fat: 0.8 },
+          strength:    { delta: 0, prot: 1.8, fat: 0.9 }
+        };
+        function calcAll() {
+          const sex = el('sex').value;
+          const W   = parseFloat(el('weight').value) || 0;
+          const Hcm = parseFloat(el('height').value) || 0;
+          const A   = parseFloat(el('age').value) || 0;
+          const PAL = parseFloat(el('pal').value)   || 1.2;
+          const goal= el('goal').value;
+          const Hm = Hcm / 100;
+          const RMR = sex === 'male' ? 9.65*W + 573*Hm - 5.08*A + 260 : 7.38*W + 607*Hm - 2.31*A + 43;
+          const TDEE = RMR * PAL;
+          const {delta, prot: protCoef, fat: fatCoef} = GOAL_PARAMS[goal];
+          const targetKcal = TDEE * (1 + delta);
+          const protG = protCoef * W;
+          const protKcal = protG * 4;
+          const fatG  = fatCoef * W;
+          const fatKcal = fatG * 9;
+          const carbKcal = Math.max(targetKcal - (protKcal + fatKcal), 0);
+          const carbG = carbKcal / 4;
+          el('rmr').textContent = Math.round(RMR);
+          el('tdee').textContent = Math.round(TDEE);
+          el('targetKcal').textContent = Math.round(targetKcal);
+          el('delta').textContent = delta*100;
+          el('protG').textContent = Math.round(protG);
+          el('carbG').textContent = Math.round(carbG);
+          el('fatG').textContent  = Math.round(fatG);
+        }
+        document.querySelectorAll('#form input, #form select').forEach(inp => {
+          inp.addEventListener('input', calcAll);
+          inp.addEventListener('change', calcAll);
+        });
+        calcAll();
+        // Bouton d'envoi vers la colonne Nutrition du tableau principal
+        document.getElementById('sendToJournal').addEventListener('click', function() {
+          const prot = Math.round(parseFloat(el('protG').textContent));
+          const carb = Math.round(parseFloat(el('carbG').textContent));
+          const fat  = Math.round(parseFloat(el('fatG').textContent));
+          // Trouver la ligne du jour ou la première ligne
+          const today = new Date().toISOString().slice(0,10);
+          let targetRow = null;
+          document.querySelectorAll('#training-table-body tr:not([id])').forEach(tr => {
+            const dateInput = tr.querySelector('input[type="date"]');
+            if (dateInput && dateInput.value === today) targetRow = tr;
+          });
+          if (!targetRow) targetRow = document.querySelector('#training-table-body tr:not([id])');
+          if (targetRow) {
+            // Colonne Nutrition (index 17)
+            const nutritionCell = targetRow.cells[17];
+            if (nutritionCell) {
+              const input = nutritionCell.querySelector('input');
+              if (input) input.value = `${prot}/${carb}/${fat}`;
+              else nutritionCell.textContent = `${prot}/${carb}/${fat}`;
+              // Ajout annotation discrète
+              let note = nutritionCell.querySelector('.macro-note');
+              if (!note) {
+                note = document.createElement('span');
+                note.className = 'macro-note text-xs text-gray-500 ml-2';
+                nutritionCell.appendChild(note);
+              }
+              note.textContent = `${prot} Pro/${carb} Glu/${fat} Lip`;
+            }
+          }
+        });
+      </script>
+    </section>
+
+    <!-- Dernières instructions -->
+    <section class="text-sm mt-8 bg-white border-t py-4 px-2 rounded">
+      <h3 class="font-bold mb-2 text-gray-700">Conseils d’utilisation et de suivi optimal :</h3>
+      <ul class="list-disc ml-6 mb-0">
+        <li>Remplissez le tableau dès la fin de chaque séance, et chaque matin pour la partie récupération/sommeil.</li>
+        <li>Surveillez les trends : une baisse sur plusieurs jours des scores sommeil, VFC, bien-être, peut indiquer la nécessité d’augmenter la récupération.</li>
+        <li>Comparez la charge hebdomadaire (sRPE) à votre moyenne sur 4 semaines pour ajuster vos cycles (ACWR/Gold-standard scientifique).</li>
+        <li>Pour chaque donnée à échelle (1–5 ou 1–10), reportez-vous aux légendes pour homogénéiser vos réponses semaine après semaine.</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- JS: Ajouter une ligne -->
+  <script>
+    document.getElementById('add-row-btn').addEventListener('click', function() {
+      const tbody = document.getElementById('training-table-body');
+      // Clone the first tr (for performance, always use the same template)
+      const firstRow = tbody.querySelector('tr');
+      let newRow = firstRow.cloneNode(true);
+      // Réinitialiser les valeurs de tous les inputs de cette ligne
+      Array.from(newRow.querySelectorAll('input, select')).forEach(el => {
+        if (el.type === 'date' || el.type === 'number' || el.type === 'text') el.value = '';
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      });
+      // Auto-incrémenter le nom du jour (si possible)
+      const jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+      let nbTr = tbody.querySelectorAll('tr').length;
+      newRow.cells[0].textContent = jours[nbTr % 7] || '';
+      tbody.appendChild(newRow);
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="aliments.js"></script>
+  <script src="nutrisport.js"></script>
+  <script src="plan_nutrition.js"></script>
+</body>
+</html>

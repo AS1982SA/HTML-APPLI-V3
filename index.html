@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de Suivi</title>
+</head>
+<body>
+    <h1>Tableau de Suivi</h1>
+    <a href="rmr_calculator.html" class="text-blue-600 underline">
+      Calculateur Métabolisme & Macros
+    </a>
+    <table class="mt-6">
+      <tr>
+        <td>Nutrition</td>
+        <td>
+          <input name="nutrition" type="text" class="border rounded p-1" placeholder="protéines/glucides/lipides" />
+          <button type="button" onclick="window.open('rmr_calculator.html','_blank','width=900,height=900')" class="ml-2 px-2 py-1 bg-blue-500 text-white rounded">Importer macros du jour</button>
+        </td>
+      </tr>
+      <!-- autres lignes du tableau -->
+    </table>
+    <script>
+    function remplirMacros(prot, carb, fat) {
+      document.querySelector('[name="nutrition"]').value = `${prot}/${carb}/${fat}`;
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculateur RMR & Macros</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-start justify-center p-6">
+  <main class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-4xl space-y-8">
+    <h1 class="text-3xl font-bold text-center">Calculateur Métabolisme & Répartition des Macros</h1>
+
+    <!-- Formulaire principal -->
+    <form id="form" class="grid gap-4 sm:grid-cols-3">
+      <!-- Sexe -->
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">Sexe</label>
+        <select id="sex" class="p-2 rounded-lg border bg-white">
+          <option value="male">Homme</option>
+          <option value="female">Femme</option>
+        </select>
+      </div>
+      <!-- Poids -->
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">Poids (kg)</label>
+        <input id="weight" type="number" min="1" value="70" class="p-2 rounded-lg border" />
+      </div>
+      <!-- Taille -->
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">Taille (cm)</label>
+        <input id="height" type="number" min="50" value="175" class="p-2 rounded-lg border" />
+      </div>
+      <!-- Âge -->
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">Âge (années)</label>
+        <input id="age" type="number" min="1" value="30" class="p-2 rounded-lg border" />
+      </div>
+      <!-- PAL -->
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">NAP / PAL</label>
+        <select id="pal" class="p-2 rounded-lg border bg-white">
+          <option value="1.2">Sédentaire (1.0 – 1.39) → 1.20</option>
+          <option value="1.5">Peu actif (1.4 – 1.59) → 1.50</option>
+          <option value="1.75">Actif (1.6 – 1.89) → 1.75</option>
+          <option value="2.2">Très actif (1.9 – 2.5) → 2.20</option>
+        </select>
+      </div>
+      <!-- Objectif -->
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">Objectif</label>
+        <select id="goal" class="p-2 rounded-lg border bg-white">
+          <option value="maintenance">Maintien du poids</option>
+          <option value="lean_bulk">Prise de masse sèche</option>
+          <option value="bulk">Prise de masse classique</option>
+          <option value="cut">Perte de masse grasse</option>
+          <option value="endurance">Performance endurance</option>
+          <option value="strength">Force / puissance</option>
+        </select>
+      </div>
+    </form>
+
+    <!-- Résultats énergétiques -->
+    <section id="resultsEnergy" class="bg-gray-100 rounded-xl p-6 shadow-inner space-y-2">
+      <h2 class="text-2xl font-semibold mb-2">Énergie</h2>
+      <p class="text-lg">⦿ <strong>RMR</strong> : <span id="rmr" class="font-mono">0</span> kcal/jour</p>
+      <p class="text-lg">⦿ <strong>TDEE</strong> : <span id="tdee" class="font-mono">0</span> kcal/jour</p>
+      <p class="text-lg">⦿ <strong>Apport cible</strong> : <span id="targetKcal" class="font-mono">0</span> kcal/jour (<span id="delta">0</span>%)</p>
+    </section>
+
+    <!-- Résultats macros -->
+    <section id="resultsMacros" class="bg-gray-100 rounded-xl p-6 shadow-inner space-y-4">
+      <h2 class="text-2xl font-semibold mb-4">Répartition des macronutriments</h2>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <p class="text-5xl font-mono" id="protG">0</p>
+          <p class="font-semibold">g Protéines</p>
+        </div>
+        <div>
+          <p class="text-5xl font-mono" id="carbG">0</p>
+          <p class="font-semibold">g Glucides</p>
+        </div>
+        <div>
+          <p class="text-5xl font-mono" id="fatG">0</p>
+          <p class="font-semibold">g Lipides</p>
+        </div>
+      </div>
+      <button id="sendToJournal" type="button" class="mt-6 px-4 py-2 bg-green-600 text-white rounded font-semibold">Envoyer vers Journal</button>
+    </section>
+
+    <!-- Explications brèves -->
+    <details class="bg-white rounded-lg shadow p-4">
+      <summary class="cursor-pointer font-semibold">Méthodologie & formules</summary>
+      <p class="mt-2 text-sm">RMR : Pavlidou 2023. TDEE = RMR × PAL. Surplus/déficit selon l'objectif : +10 % bulk, +5 % lean bulk, –20 % cut, 0 % maintien, +0 % endurance/strength (ajuster).</p>
+      <p class="text-sm">Protein/Lipid coefficients basées sur ISSN 2017–22 & ACSM 2016.</p>
+    </details>
+  </main>
+
+  <!-- Script -->
+  <script>
+    const el = id => document.getElementById(id);
+
+    const GOAL_PARAMS = {
+      maintenance: { delta: 0, prot: 1.4, fat: 0.9 },
+      lean_bulk:   { delta: 0.05, prot: 2.0, fat: 0.9 },
+      bulk:        { delta: 0.10, prot: 1.8, fat: 0.8 },
+      cut:         { delta: -0.20, prot: 2.4, fat: 0.9 },
+      endurance:   { delta: 0, prot: 1.4, fat: 0.8 },
+      strength:    { delta: 0, prot: 1.8, fat: 0.9 }
+    };
+
+    function calcAll() {
+      // Entrées
+      const sex = el('sex').value;
+      const W   = parseFloat(el('weight').value) || 0;
+      const Hcm = parseFloat(el('height').value) || 0;
+      const A   = parseFloat(el('age').value) || 0;
+      const PAL = parseFloat(el('pal').value)   || 1.2;
+      const goal= el('goal').value;
+
+      const Hm = Hcm / 100;
+      // RMR
+      const RMR = sex === 'male' ? 9.65*W + 573*Hm - 5.08*A + 260
+                                  : 7.38*W + 607*Hm - 2.31*A + 43;
+      const TDEE = RMR * PAL;
+
+      const {delta, prot: protCoef, fat: fatCoef} = GOAL_PARAMS[goal];
+      const targetKcal = TDEE * (1 + delta);
+
+      // Macros
+      const protG = protCoef * W;
+      const protKcal = protG * 4;
+
+      const fatG  = fatCoef * W;
+      const fatKcal = fatG * 9;
+
+      const carbKcal = Math.max(targetKcal - (protKcal + fatKcal), 0);
+      const carbG = carbKcal / 4;
+
+      // Affichage
+      el('rmr').textContent = Math.round(RMR);
+      el('tdee').textContent = Math.round(TDEE);
+      el('targetKcal').textContent = Math.round(targetKcal);
+      el('delta').textContent = delta*100;
+
+      el('protG').textContent = Math.round(protG);
+      el('carbG').textContent = Math.round(carbG);
+      el('fatG').textContent  = Math.round(fatG);
+    }
+
+    document.querySelectorAll('#form input, #form select').forEach(inp => {
+      inp.addEventListener('input', calcAll);
+      inp.addEventListener('change', calcAll);
+    });
+    calcAll();
+
+    document.getElementById('sendToJournal').addEventListener('click', () => {
+      window.opener?.remplirMacros(
+        Math.round(parseFloat(el('protG').textContent)),
+        Math.round(parseFloat(el('carbG').textContent)),
+        Math.round(parseFloat(el('fatG').textContent))
+      );
+    });
+  </script>
+</body>
+</html>
