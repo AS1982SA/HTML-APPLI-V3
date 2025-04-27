@@ -1,0 +1,11 @@
+{
+  "name": "suivi-sport-metabolique",
+  "version": "1.0.0",
+  "description": "Projet de suivi sportif avec calcul métabolique précis.",
+  "scripts": {
+    "serve": "serve -l 5555 --no-clipboard --single ./"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
