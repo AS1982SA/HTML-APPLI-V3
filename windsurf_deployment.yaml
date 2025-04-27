@@ -1,0 +1,6 @@
+site:
+  name: suivi-sport-metabolique
+  framework: vanilla
+  publish: .
+  build_command: ""
+  dev_command: ""
